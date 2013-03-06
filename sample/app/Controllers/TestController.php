@@ -1,7 +1,7 @@
 <?php
 namespace app\Controllers;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Orlex\Annotation\Route;
 
 /**
  * @Route(path="/test")

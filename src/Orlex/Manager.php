@@ -37,9 +37,11 @@ class Manager {
     public function scaffold() {
         $this->getContainer()->register(new ServiceControllerServiceProvider());
 
-        $this->routes = new RouteCollection();
+        $compiler = new \Orlex\AnnotationManager\Compiler\Route($this->getAnnotationManager()->getIndexedReader(), new \Orlex\AnnotationManager\Loader\DirectoryLoader());
+        $compiler->setContainer($this->getContainer());
+
         foreach ($this->configuration['controller_paths'] as $path) {
-            $this->routes->addCollection($this->getAnnotationManager()->getLoader()->load($path));
+            $compiler->compile($path);
         }
 
         return $this;

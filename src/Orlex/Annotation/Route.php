@@ -1,6 +1,7 @@
 <?php
 namespace Orlex\Annotation;
 
+use Silex\Controller;
 use Silex\Application;
 
 /**
@@ -13,7 +14,8 @@ class Route {
      */
     public $path;
 
-    public function modifyApp(Application $app, \Reflection $refl = null) {
-        
-    }
+    /**
+     * @var array<string>
+     */
+    public $methods = ['GET'];
 }

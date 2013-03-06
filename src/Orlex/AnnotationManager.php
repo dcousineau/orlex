@@ -2,6 +2,7 @@
 namespace Orlex;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\IndexedReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
 use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
@@ -15,12 +16,8 @@ class AnnotationManager {
      */
     protected $reader;
 
-    protected $loader;
-
     public function __construct(\Silex\Application $app) {
         $this->setContainer($app);
-
-        AnnotationRegistry::registerAutoloadNamespace('Symfony\Component\Routing\Annotation\Route', dirname(dirname(__DIR__)) .'/vendor/symfony/routing/');
         AnnotationRegistry::registerAutoloadNamespace('Orlex\Annotation', dirname(__DIR__));
     }
 
@@ -43,25 +40,9 @@ class AnnotationManager {
     }
 
     /**
-     * @param \Symfony\Component\Routing\Loader\AnnotationDirectoryLoader $loader
+     * @return \Doctrine\Common\Annotations\IndexedReader
      */
-    public function setLoader(AnnotationDirectoryLoader $loader) {
-        $this->loader = $loader;
+    public function getIndexedReader() {
+        return new IndexedReader($this->getReader());
     }
-
-    /**
-     * @return \Symfony\Component\Routing\Loader\AnnotationDirectoryLoader
-     */
-    public function getLoader(){
-        if (!$this->loader) {
-            $locator      = new FileLocator();
-            $classLoader  = new AnnotationClassLoader($this->getReader());
-            $classLoader->setContainer($this->getContainer());
-            $this->loader = new AnnotationDirectoryLoader($locator, $classLoader);
-        }
-
-        return $this->loader;
-    }
-
-
 }
