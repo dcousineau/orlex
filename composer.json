@@ -1,0 +1,22 @@
+{
+    "name": "splashmedia/orlex",
+    "description": "Silex extension for providing an organized, annotated controller infrastructure, designed to blend the simplicity of Silex and organization of Symfony 2",
+    "keywords": ["framework", "silex"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Cousineau",
+            "email": "dcousineau@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "silex/silex": "1.0.*",
+        "doctrine/annotations": "1.0.*",
+        "symfony/config": "2.2.*"
+    },
+    "autoload": {
+        "psr-0": { "Orlex": "src/" }
+    },
+    "minimum-stability": "dev"
+}
