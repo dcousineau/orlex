@@ -51,9 +51,13 @@ class Route extends AbstractCompiler {
         $httpMethod = strtoupper(implode('|', $route->methods));
         if (empty($httpMethod))
             $httpMethod = 'GET';
+        $name = $route->name;
+        if (empty($name))
+            $name = $this->formatName($class, $method);
 
         $controller = $app->match($path, "$serviceid:{$method->getName()}")
-                          ->method($httpMethod);
+                          ->method($httpMethod)
+                          ->bind($name);
 
         $modifiers = array_filter($annotations, function($a) { return $a instanceOf RouteModifier;});
         usort($modifiers, function (RouteModifier $a, RouteModifier $b) {

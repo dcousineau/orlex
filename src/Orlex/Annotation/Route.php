@@ -18,4 +18,9 @@ class Route {
      * @var array<string>
      */
     public $methods = ['GET'];
+
+    /**
+     * @var string
+     */
+    public $name;
 }
