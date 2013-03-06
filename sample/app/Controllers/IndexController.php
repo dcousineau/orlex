@@ -10,8 +10,11 @@ use Orlex\Annotation\After;
  * @Route(path="/")
  */
 class IndexController {
+    protected $foo = [];
+
     public function beforeIndex() {
         var_dump('Before');
+        $this->foo[] = 'before';
     }
 
     /**
@@ -21,10 +24,14 @@ class IndexController {
      */
     public function indexAction() {
         var_dump('here');
+        $this->foo[] = 'during';
     }
 
     public function afterIndex() {
         var_dump('After');
+        $this->foo[] = 'after';
+
+        var_dump($this->foo);
     }
 
     /**

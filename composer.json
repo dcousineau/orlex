@@ -1,5 +1,5 @@
 {
-    "name": "splashmedia/orlex",
+    "name": "dcousineau/orlex",
     "description": "Silex extension for providing an organized, annotated controller infrastructure, designed to blend the simplicity of Silex and organization of Symfony 2",
     "keywords": ["framework", "silex"],
     "license": "MIT",
