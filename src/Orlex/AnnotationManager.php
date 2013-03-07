@@ -16,9 +16,14 @@ class AnnotationManager {
      */
     protected $reader;
 
-    public function __construct(\Silex\Application $app) {
+    public function __construct(\Silex\Application $app, array $annotationPaths = []) {
         $this->setContainer($app);
+
         AnnotationRegistry::registerAutoloadNamespace('Orlex\Annotation', dirname(__DIR__));
+
+        foreach ($annotationPaths as $dir => $namespace) {
+            AnnotationRegistry::registerAutoloadNamespace($namespace, $dir);
+        }
     }
 
     /**

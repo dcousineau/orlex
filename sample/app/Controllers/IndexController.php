@@ -4,6 +4,7 @@ namespace app\Controllers;
 use Orlex\Annotation\Route;
 use Orlex\Annotation\Before;
 use Orlex\Annotation\After;
+use app\Annotation\Test;
 
 
 /**
@@ -21,6 +22,7 @@ class IndexController {
      * @Route(path="/")
      * @Before("beforeIndex")
      * @After("afterIndex")
+     * @Test
      */
     public function indexAction() {
         var_dump('here');

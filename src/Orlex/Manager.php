@@ -40,7 +40,7 @@ class Manager {
         $compiler = new \Orlex\AnnotationManager\Compiler\Route($this->getAnnotationManager()->getIndexedReader(), new \Orlex\AnnotationManager\Loader\DirectoryLoader());
         $compiler->setContainer($this->getContainer());
 
-        foreach ($this->configuration['controller_paths'] as $path) {
+        foreach ($this->configuration['controllers'] as $path) {
             $compiler->compile($path);
         }
 
@@ -53,7 +53,7 @@ class Manager {
 
     public function getAnnotationManager() {
         if (!$this->annotationManager) {
-            $this->annotationManager = new AnnotationManager($this->getContainer());
+            $this->annotationManager = new AnnotationManager($this->getContainer(), $this->configuration['annotations']);
         }
 
         return $this->annotationManager;
