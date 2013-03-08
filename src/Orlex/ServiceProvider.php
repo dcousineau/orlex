@@ -16,8 +16,7 @@ class ServiceProvider implements ServiceProviderInterface {
         ////
         // Absolute dependencies
         ////
-        if (!isset($app['resolver']))
-            $app->register(new ServiceControllerServiceProvider());
+        $app->register(new ServiceControllerServiceProvider());
 
         ////
         // User Configured Values
