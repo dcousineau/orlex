@@ -62,19 +62,6 @@ Orlex is provided as a [composer package](http://getcomposer.org/) and requires 
 }
 ```
 
-Since Orlex is *not currenlty distributed through packagist*, you will need to add a reference to this repository in your `composer.json` file:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/dcousineau/orlex.git"
-        }
-    ]
-}
-```
-
 WARNING
 ---
 
