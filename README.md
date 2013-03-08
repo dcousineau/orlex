@@ -112,6 +112,9 @@ use Orlex\Controller\TwigTrait;
  * @Route(path="/")
  */
 class IndexController {
+    use ContainerAwareTrait;
+    use TwigTrait;
+    
     /**
      * @Route(path="/", name="root")
      */
