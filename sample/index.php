@@ -6,18 +6,17 @@ spl_autoload_register(function($class) {
         include_once $classpath;
 });
 
-
+////////////////////////////////////////////////////////////////////////
 
 $app = new \Silex\Application();
 
-$orlex = new \Orlex\Manager($app, [
-    'controllers' => [
+$app->register(new \Orlex\ServiceProvider(),[
+    'orlex.controller.dirs' => [
         __DIR__ . '/app/Controllers',
     ],
-    'annotations' => [
+    'orlex.annotation.dirs' => [
         __DIR__ => 'app\Annotation',
     ]
 ]);
 
-$orlex->scaffold()
-      ->run();
+$app->run();

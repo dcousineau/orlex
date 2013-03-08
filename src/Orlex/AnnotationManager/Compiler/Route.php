@@ -7,27 +7,42 @@ use Orlex\ContainerAwareTrait;
 class Route extends AbstractCompiler {
     use ContainerAwareTrait;
 
-    protected $globals = [
-        'path' => '',
-    ];
+    protected $globals;
+    protected $globalAnnotations;
 
-    protected $globalAnnotations = [];
+    /**
+     * Reset globals to ensure clean slate
+     */
+    protected function resetState() {
+        $this->globals = [
+            'path' => '',
+        ];
 
+        $this->globalAnnotations = [];
+    }
+
+    /**
+     * @param \ReflectionClass $class
+     * @param array $annotations
+     */
     public function compileClass(\ReflectionClass $class, array $annotations) {
         $app = $this->getContainer();
+
+        //New class, reset internal state
+        $this->resetState();
 
         if (isset($annotations['Orlex\Annotation\Route'])) {
             /** @var $route \Orlex\Annotation\Route */
             $route = $annotations['Orlex\Annotation\Route'];
 
+            //Prefix path for all method routes
             $this->globals['path'] = rtrim($route->path, '/');
         }
 
         $this->globalAnnotations = $annotations;
 
         //Register Controller With App
-
-        $app['controller.' . $this->formatName($class)] = $app->share(function($app) use ($class) {
+        $app[$this->serviceId($class)] = $app->share(function($app) use ($class) {
             $controller = $class->newInstance();
 
             if (method_exists($controller, 'setContainer'))
@@ -37,28 +52,38 @@ class Route extends AbstractCompiler {
         });
     }
 
+    /**
+     * @param \ReflectionClass $class
+     * @param \ReflectionMethod $method
+     * @param array $annotations
+     */
     public function compileMethod(\ReflectionClass $class, \ReflectionMethod $method, array $annotations) {
         $app = $this->getContainer();
 
+        //We're compiling routes, only concern ourselves with methods that have a @Route annotation
         if (!isset($annotations['Orlex\Annotation\Route'])) return;
 
         /** @var $route \Orlex\Annotation\Route */
         $route = $annotations['Orlex\Annotation\Route']; unset($annotations['Orlex\Annotation\Route']);
 
-        $serviceid = 'controller.' . $this->formatName($class);
+        $serviceid = $this->serviceId($class);
 
         $path = $this->globals['path'] . '/' . ltrim($route->path, '/');
+
         $httpMethod = strtoupper(implode('|', $route->methods));
         if (empty($httpMethod))
             $httpMethod = 'GET';
+
         $name = $route->name;
         if (empty($name))
             $name = $this->formatName($class, $method);
 
+        //Bind route to Silex application
         $controller = $app->match($path, "$serviceid:{$method->getName()}")
                           ->method($httpMethod)
                           ->bind($name);
 
+        //Fetch and sort RouteModifier annotations for modification
         $modifiers = array_filter($annotations, function($a) { return $a instanceOf RouteModifier;});
         usort($modifiers, function (RouteModifier $a, RouteModifier $b) {
             return $a->weight() > $b->weight() ? 1 : -1;
@@ -70,6 +95,24 @@ class Route extends AbstractCompiler {
         }
     }
 
+    /**
+     * Formats Class into service id used by DI container
+     *
+     * @param \ReflectionClass $class
+     * @return string
+     */
+    protected function serviceId(\ReflectionClass $class) {
+        return 'controller.' . $this->formatName($class);
+    }
+
+    /**
+     * Formats Class and optionally Method into a slug name in the format:
+     *    namespace_class_method
+     *
+     * @param \ReflectionClass $class
+     * @param \ReflectionMethod $method
+     * @return string
+     */
     protected function formatName(\ReflectionClass $class, \ReflectionMethod $method = null) {
         $classname = strtolower(str_replace('\\', '_', $class->name));
 

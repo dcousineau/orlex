@@ -1,9 +1,11 @@
 <?php
 namespace Orlex;
 
+use Silex\Application;
+
 trait ContainerAwareTrait {
     /**
-     * @var \Silex\Application
+     * @var Application
      */
     protected $container;
 
@@ -24,17 +26,17 @@ trait ContainerAwareTrait {
     }
 
     /**
-     * @return \Silex\Application
+     * @return Application
      */
     public function getContainer() {
         return $this->container;
     }
 
     /**
-     * @param \Silex\Application $container
+     * @param Application $container
      * @return $this
      */
-    public function setContainer(\Silex\Application $container) {
+    public function setContainer(Application $container) {
         $this->container = $container;
         return $this;
     }

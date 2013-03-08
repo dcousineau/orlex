@@ -6,6 +6,7 @@ use Orlex\Annotation\Before;
 use Orlex\Annotation\After;
 use app\Annotation\Test;
 
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route(path="/")
@@ -19,13 +20,13 @@ class IndexController {
     }
 
     /**
-     * @Route(path="/")
+     * @Route(path="/",methods={"GET"})
      * @Before("beforeIndex")
      * @After("afterIndex")
      * @Test
      */
     public function indexAction() {
-        var_dump('here');
+        var_dump("During");
         $this->foo[] = 'during';
     }
 
@@ -34,12 +35,15 @@ class IndexController {
         $this->foo[] = 'after';
 
         var_dump($this->foo);
+
+        return new Response('Response from ' . __METHOD__);
     }
 
     /**
      * @Route(path="/page/{id}")
      */
     public function pageAction($id) {
-        var_dump($id);die();
+        var_dump($id);
+        return new Response('Response from ' . __METHOD__);
     }
 }
