@@ -148,6 +148,8 @@ class Test implements RouteModifier {
 }
 ```
 
+For more information on how to define annotations, please see the [Doctrine Annotations documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html).
+
 **Expect this interface to possibly change in the future, particularly where the `modify(…)` signature is concerned**.
 
 Internal Behavior
