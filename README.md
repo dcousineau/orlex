@@ -37,24 +37,15 @@ class IndexController {
      * @Before("beforeIndex")
      * @After("afterIndex")
      */
-    public function indexAction() {
-        //Do Stuff
-    }
+    public function indexAction() { /* Do Stuff */ }
     
-    public function beforeIndex() {
-        //Do Stuff Before
-    }
-
-    public function afterIndex() {
-        //Do Stuff After
-    }
+    public function beforeIndex() { /* Do Stuff Before */ }
+    public function afterIndex() { /* Do Stuff After */ }
 
     /**
      * @Route(path="/page/{id}", name="root_page", methods={"GET", "POST"})
      */
-    public function pageAction($id) {
-        //Do Stuff
-    }
+    public function pageAction($id) { /* Do Stuff With $id */ }
 }
 ```
 
@@ -162,14 +153,6 @@ use Silex\Application;
 class Test implements RouteModifier {
     public function weight() { return 1; }
 
-    /**
-     * @param string $serviceid
-     * @param \Silex\Controller $controller
-     * @param \Silex\Application $app
-     * @param \ReflectionClass $class
-     * @param \ReflectionMethod $method
-     * @return mixed
-     */
     public function modify($serviceid, Controller $controller, Application $app, \ReflectionClass $class, \ReflectionMethod $method) {
         $controller->before(function() {
             var_dump('From @Test annotation');
