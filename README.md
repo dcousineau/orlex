@@ -123,6 +123,8 @@ $app->register(new \Orlex\ServiceProvider(),[
 //...
 ```
 
+> **NOTE:** The path key for annotation autoloading should be the *root directory containing the entire namespace*. If your annotation files are of the namespace `app\Annotation` and your annotation files are in `/path/to/src/app/Annotation`, the proper annotation configuration would be `'/path/to/src' => 'app\Annotation'`
+
 If the annotation implements the `Orlex\Annotation\RouteModifier` interface, Orlex will allow it to alter the internal Silex controller created for that specific route/action:
 
 ```php
@@ -164,7 +166,7 @@ Then, each method with a `@Route` annotation is created by performing an `$app->
 Want To Help?
 ---
 
-Please do! Just remember this is super early alpha under going "api stress testing" (meaning I'm using this internally on a project and new features are being implemented on demand and going through trial-by-fire).
+Please do! Just remember this is early alpha under going "api stress testing" (meaning I'm using this internally on a project and new features are being implemented on demand and going through trial-by-fire).
 
 To-Do
 ---
