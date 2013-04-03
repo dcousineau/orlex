@@ -82,6 +82,16 @@ class Route extends AbstractCompiler {
         $controller = $app->match($path, "$serviceid:{$method->getName()}")
                           ->method($httpMethod)
                           ->bind($name);
+        
+        //Get parameters from method and bind default values to Silex route to allow optional
+        //parameters. E.g. public function fooAction($param_1, $param_2 = 'default'); will perform
+        //a $controller->value('param_2', 'default');
+        foreach ($method->getParameters() as $parameter) {
+            /** @var $parameter \ReflectionParameter */
+            if ($parameter->isDefaultValueAvailable()) {
+                $controller->value($parameter->getName(), $parameter->getDefaultValue());
+            }
+        }
 
         //Fetch and sort RouteModifier annotations for modification
         $modifiers = array_filter($annotations, function($a) { return $a instanceOf RouteModifier;});
