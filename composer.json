@@ -13,7 +13,7 @@
         "php": ">=5.4.0",
         "silex/silex": "1.0.*",
         "doctrine/annotations": "1.0.*",
-        "symfony/config": ">=2.1.0"
+        "symfony/config": "~2.1"
     },
     "suggest": {
         "twig/twig": "For use by the Orlex Twig Controller Trait",
