@@ -13,11 +13,12 @@
         "php": ">=5.4.0",
         "silex/silex": "1.0.*",
         "doctrine/annotations": "1.0.*",
-        "symfony/config": "2.1.*"
+        "symfony/config": ">=2.1.0"
     },
     "suggest": {
         "twig/twig": "For use by the Orlex Twig Controller Trait",
-        "symfony/form": "For use by the Orlex Form Controller Trait"
+        "symfony/form": "For use by the Orlex Form Controller Trait",
+        "syfmony/console": "For use with the console helpers"
     },
     "autoload": {
         "psr-0": { "Orlex": "src/" }
