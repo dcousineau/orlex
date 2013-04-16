@@ -1,5 +1,6 @@
 Orlex: Organized Silex
 ===
+[![Build Status](https://travis-ci.org/dcousineau/orlex.png)](https://travis-ci.org/dcousineau/orlex)
 
 Orlex attempts to give a mild amount of structure to [Silex](http://github.com/fabpot/Silex) without extending, overwriting, or using any dirty hacks.
 
