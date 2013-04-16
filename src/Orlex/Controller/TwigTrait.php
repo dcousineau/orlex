@@ -8,7 +8,6 @@ trait TwigTrait {
      * @return string Rendered template
      */
     public function render($template, array $vars = []) {
-        /** @var $twig Twig_ */
         return $this->get('twig')->render($template, $vars);
     }
 }

@@ -15,11 +15,18 @@ abstract class AbstractCompiler {
      */
     protected $loader;
 
+    /**
+     * @param IndexedReader $reader
+     * @param FileLoader $loader
+     */
     public function __construct(IndexedReader $reader, FileLoader $loader) {
         $this->reader = $reader;
         $this->loader = $loader;
     }
 
+    /**
+     * @param string $path Directory path to compile
+     */
     public function compile($path) {
 
         $this->loader->setCallback(function($class, $file) {
@@ -41,6 +48,34 @@ abstract class AbstractCompiler {
         });
 
         $this->loader->load($path);
+    }
+
+    /**
+     * @param FileLoader $loader
+     */
+    public function setLoader(FileLoader $loader) {
+        $this->loader = $loader;
+    }
+
+    /**
+     * @return FileLoader
+     */
+    public function getLoader() {
+        return $this->loader;
+    }
+
+    /**
+     * @param IndexedReader $reader
+     */
+    public function setReader(IndexedReader $reader) {
+        $this->reader = $reader;
+    }
+
+    /**
+     * @return IndexedReader
+     */
+    public function getReader() {
+        return $this->reader;
     }
 
     abstract public function compileClass(\ReflectionClass $class, array $annotations);

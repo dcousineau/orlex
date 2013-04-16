@@ -4,6 +4,10 @@
 
 composer.lock
 /vendor/*
+/bin/*
 
-/puppet
+/puppet/*
 VagrantFile
+
+phpunit.xml
+/reports/*
