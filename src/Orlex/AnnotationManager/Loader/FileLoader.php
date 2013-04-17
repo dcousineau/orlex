@@ -25,10 +25,6 @@ class FileLoader extends BaseLoader {
      */
     public function __construct(FileLocatorInterface $locator = null)
     {
-        if (!function_exists('token_get_all')) {
-            throw new \RuntimeException('The Tokenizer extension is required for the routing annotation loaders.');
-        }
-
         if (!$locator) {
             $locator = new FileLocator();
         }
@@ -67,7 +63,8 @@ class FileLoader extends BaseLoader {
         $path = $this->locator->locate($file);
 
         if ($class = $this->findClass($path)) {
-            $this->callback($class, $path);
+            $callback = $this->callback;
+            $callback($class, $path);
         }
     }
 

@@ -27,10 +27,10 @@ class DirectoryLoader extends FileLoader {
             return (string) $a > (string) $b ? 1 : -1;
         });
 
+        $callback = $this->callback;
         foreach ($files as $file) {
             /** @var $file \SplFileInfo */
             if ($class = $this->findClass($file)) {
-                $callback = $this->callback;
                 $callback($class, $file->getPathname());
             }
         }
