@@ -13,13 +13,13 @@ class TestController {
      * @Route(path="/")
      */
     public function indexAction() {
-        return new Response('Response from ' . __METHOD__);
+        return new Response('<strong>Response from ' . __METHOD__ . '</strong>');
     }
 
     /**
      * @Route(path="/hello")
      */
     public function helloAction() {
-        return new Response('Response from ' . __METHOD__);
+        return new Response('<strong>Response from ' . __METHOD__ . '</strong>');
     }
 }

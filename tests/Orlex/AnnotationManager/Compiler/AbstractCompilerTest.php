@@ -16,10 +16,6 @@ class AbstractCompilerTest extends \PHPUnit_Framework_TestCase {
         $this->mock = m::mock('Orlex\AnnotationManager\Compiler\AbstractCompiler');
     }
 
-    public function testCompile() {
-        $this->markTestIncomplete('Perform an integration test');
-    }
-
     public function testGetAndSetLoader() {
         $this->mock->shouldDeferMissing();
 

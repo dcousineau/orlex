@@ -15,8 +15,8 @@ class IndexController {
     protected $foo = [];
 
     public function beforeIndex() {
-        var_dump('Before');
         $this->foo[] = 'before';
+        echo "<pre>In " . __METHOD__ . "...</pre>";
     }
 
     /**
@@ -26,24 +26,27 @@ class IndexController {
      * @Test
      */
     public function indexAction() {
-        var_dump("During");
         $this->foo[] = 'during';
+        echo "<pre>In " . __METHOD__ . "...</pre>";
+
+        return new Response('<strong>Response from ' . __METHOD__ . '</strong>');
     }
 
     public function afterIndex() {
-        var_dump('After');
         $this->foo[] = 'after';
+        echo "<pre>In " . __METHOD__ . "...</pre>";
 
-        var_dump($this->foo);
+        echo "<pre>Controller State: " . var_export($this->foo, true) . "</pre>";
 
-        return new Response('Response from ' . __METHOD__);
+        return new Response('<strong>Response from ' . __METHOD__ . '</strong>');
     }
 
     /**
      * @Route(path="/page/{id}")
      */
     public function pageAction($id) {
-        var_dump($id);
-        return new Response('Response from ' . __METHOD__);
+        echo "<pre>ID: $id</pre>";
+
+        return new Response('<strong>Response from ' . __METHOD__ . '</strong>');
     }
 }

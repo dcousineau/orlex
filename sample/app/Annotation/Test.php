@@ -21,8 +21,10 @@ class Test implements RouteModifier {
      * @return mixed
      */
     public function modify($serviceid, Controller $controller, Application $app, \ReflectionClass $class, \ReflectionMethod $method) {
+        echo "<pre>In " . __METHOD__ . " (annotation modification for {$class->getName()}::{$method->getName()}...</pre>";
+
         $controller->before(function() {
-            var_dump('From @Test annotation');
+            echo "<pre>In Callback Induced From @Test Annotation...</pre>";
         });
     }
 }
