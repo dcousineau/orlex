@@ -43,7 +43,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Silex\ServiceControllerResolver', $this->app['resolver'], 'Registers the ServiceControllerServiceProvider');
         $this->assertEquals([], $this->app['orlex.controller.dirs'], 'Registers empty directory placeholder');
         $this->assertEquals([], $this->app['orlex.annotation.dirs'], 'Registers empty annotation placeholder');
-        $this->assertTrue(isset($this->app['orlex.annotation.indexedreader']), 'Registers indexed reader');
+        $this->assertTrue(isset($this->app['orlex.annotation.reader']), 'Registers annotation reader');
         $this->assertTrue(isset($this->app['orlex.directoryloader']), 'Registers directory loader');
         $this->assertTrue(isset($this->app['orlex.route.compiler']), 'Registers route compiler');
 
@@ -54,9 +54,9 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
         ];
 
         //Check indexed reader
-        /** @var $reader \Doctrine\Common\Annotations\IndexedReader */
-        $reader = $this->app['orlex.annotation.indexedreader'];
-        $this->assertInstanceOf('Doctrine\Common\Annotations\IndexedReader', $reader);
+        /** @var $reader \Doctrine\Common\Annotations\Reader */
+        $reader = $this->app['orlex.annotation.reader'];
+        $this->assertInstanceOf('Doctrine\Common\Annotations\Reader', $reader);
 
         //Check directory loader
         /** @var $loader \Orlex\AnnotationManager\Loader\DirectoryLoader */
@@ -67,7 +67,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
         /** @var $compiler \Orlex\AnnotationManager\Compiler\Route */
         $compiler = $this->app['orlex.route.compiler'];
         $this->assertInstanceOf('Orlex\AnnotationManager\Compiler\Route', $compiler);
-        $this->assertEquals($reader, $compiler->getReader(), 'Reader is set from orlex.annotation.indexedreader');
+        $this->assertEquals($reader, $compiler->getReader(), 'Reader is set from orlex.annotation.reader');
         $this->assertEquals($loader, $compiler->getLoader(), 'Loader is set from orlex.directoryloader');
 
 

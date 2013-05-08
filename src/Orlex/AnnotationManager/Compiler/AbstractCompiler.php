@@ -1,12 +1,12 @@
 <?php
 namespace Orlex\AnnotationManager\Compiler;
 
-use Doctrine\Common\Annotations\IndexedReader;
+use Doctrine\Common\Annotations\Reader;
 use Orlex\AnnotationManager\Loader\FileLoader;
 
 abstract class AbstractCompiler {
     /**
-     * @var \Doctrine\Common\Annotations\IndexedReader
+     * @var \Doctrine\Common\Annotations\Reader
      */
     protected $reader;
 
@@ -16,10 +16,10 @@ abstract class AbstractCompiler {
     protected $loader;
 
     /**
-     * @param IndexedReader $reader
+     * @param Reader $reader
      * @param FileLoader $loader
      */
-    public function __construct(IndexedReader $reader, FileLoader $loader) {
+    public function __construct(Reader $reader, FileLoader $loader) {
         $this->reader = $reader;
         $this->loader = $loader;
     }
@@ -65,14 +65,14 @@ abstract class AbstractCompiler {
     }
 
     /**
-     * @param IndexedReader $reader
+     * @param Reader $reader
      */
-    public function setReader(IndexedReader $reader) {
+    public function setReader(Reader $reader) {
         $this->reader = $reader;
     }
 
     /**
-     * @return IndexedReader
+     * @return Reader
      */
     public function getReader() {
         return $this->reader;
