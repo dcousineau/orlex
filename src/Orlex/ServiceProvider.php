@@ -27,13 +27,13 @@ class ServiceProvider implements ServiceProviderInterface {
         ////
         // Internal Services
         ////
-        $app['orlex.annotation.indexedreader'] = $app->share(function($app) {
+        $app['orlex.annotation.reader'] = $app->share(function($app) {
             AnnotationRegistry::registerAutoloadNamespace('Orlex\Annotation', dirname(__DIR__));
             foreach ($app['orlex.annotation.dirs'] as $dir => $namespace) {
                 AnnotationRegistry::registerAutoloadNamespace($namespace, $dir);
             }
 
-            return new Annotations\IndexedReader(new Annotations\AnnotationReader());
+            return new Annotations\AnnotationReader();
         });
 
         $app['orlex.directoryloader'] = $app->share(function() {
@@ -41,7 +41,7 @@ class ServiceProvider implements ServiceProviderInterface {
         });
 
         $app['orlex.route.compiler'] = $app->share(function($app) {
-            $compiler = new Compiler\Route($app['orlex.annotation.indexedreader'], $app['orlex.directoryloader']);
+            $compiler = new Compiler\Route($app['orlex.annotation.reader'], $app['orlex.directoryloader']);
             $compiler->setContainer($app);
             return $compiler;
         });
