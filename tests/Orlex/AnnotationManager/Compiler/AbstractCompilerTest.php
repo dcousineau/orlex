@@ -18,7 +18,7 @@ class AbstractCompilerTest extends \PHPUnit_Framework_TestCase {
     protected $delegate;
 
     public function setUp() {
-        $this->mock = new MockAbstractCompiler(new Annotations\IndexedReader(new Annotations\AnnotationReader()), new FileLoader());
+        $this->mock = new MockAbstractCompiler(new Annotations\AnnotationReader(), new FileLoader());
         $this->delegate = m::mock(); //->shouldIgnoreMissing();
 
         $this->mock->delegate = $this->delegate;
@@ -42,7 +42,7 @@ class AbstractCompilerTest extends \PHPUnit_Framework_TestCase {
                            ->with($reflClassMatcher, m::on(function($inp) use ($reflMethod){ return $inp->getName() == $reflMethod->getName(); }), $expectedAnnotations);
         }
 
-        $reader = m::mock('Doctrine\Common\Annotations\IndexedReader');
+        $reader = m::mock('Doctrine\Common\Annotations\Reader');
         $reader->shouldReceive('getClassAnnotations')
                ->once()
                ->withAnyArgs()
@@ -62,7 +62,7 @@ class AbstractCompilerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetAndSetReader() {
-        $this->mock->setReader($reader = m::mock('Doctrine\Common\Annotations\IndexedReader'));
+        $this->mock->setReader($reader = m::mock('Doctrine\Common\Annotations\Reader'));
         $this->assertEquals($reader, $this->mock->getReader());
     }
 

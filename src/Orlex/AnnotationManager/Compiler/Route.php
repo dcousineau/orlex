@@ -3,6 +3,7 @@ namespace Orlex\AnnotationManager\Compiler;
 
 use Orlex\Annotation\RouteModifier;
 use Orlex\ContainerAwareTrait;
+use Orlex\Annotation\Route as RouteAnnotation;
 
 class Route extends AbstractCompiler {
     use ContainerAwareTrait;
@@ -31,9 +32,14 @@ class Route extends AbstractCompiler {
         //New class, reset internal state
         $this->resetState();
 
-        if (isset($annotations['Orlex\Annotation\Route'])) {
+
+        $routes = array_filter($annotations, function($annotation) {
+            return is_object($annotation) && $annotation instanceof RouteAnnotation;
+        });
+
+        if ($routes) {
             /** @var $route \Orlex\Annotation\Route */
-            $route = $annotations['Orlex\Annotation\Route'];
+            $route = $routes[0];
 
             //Prefix path for all method routes
             $this->globals['path'] = rtrim($route->path, '/');
@@ -61,47 +67,54 @@ class Route extends AbstractCompiler {
         $app = $this->getContainer();
 
         //We're compiling routes, only concern ourselves with methods that have a @Route annotation
-        if (!isset($annotations['Orlex\Annotation\Route'])) return;
 
-        /** @var $route \Orlex\Annotation\Route */
-        $route = $annotations['Orlex\Annotation\Route']; unset($annotations['Orlex\Annotation\Route']);
 
-        $serviceid = $this->serviceId($class);
-
-        $path = $this->globals['path'] . '/' . ltrim($route->path, '/');
-
-        $httpMethod = strtoupper(implode('|', $route->methods));
-        if (empty($httpMethod))
-            $httpMethod = 'GET';
-
-        $name = $route->name;
-        if (empty($name))
-            $name = $this->formatName($class, $method);
-
-        //Bind route to Silex application
-        $controller = $app->match($path, "$serviceid:{$method->getName()}")
-                          ->method($httpMethod)
-                          ->bind($name);
-        
-        //Get parameters from method and bind default values to Silex route to allow optional
-        //parameters. E.g. public function fooAction($param_1, $param_2 = 'default'); will perform
-        //a $controller->value('param_2', 'default');
-        foreach ($method->getParameters() as $parameter) {
-            /** @var $parameter \ReflectionParameter */
-            if ($parameter->isDefaultValueAvailable()) {
-                $controller->value($parameter->getName(), $parameter->getDefaultValue());
-            }
-        }
-
-        //Fetch and sort RouteModifier annotations for modification
-        $modifiers = array_filter($annotations, function($a) { return $a instanceOf RouteModifier;});
-        usort($modifiers, function (RouteModifier $a, RouteModifier $b) {
-            return $a->weight() > $b->weight() ? 1 : -1;
+        $routes = array_filter($annotations, function($annotation) {
+            return is_object($annotation) && $annotation instanceof RouteAnnotation;
         });
 
-        foreach ($modifiers as $annotation) {
-            /** @var $annotation RouteModifier */
-            $annotation->modify($serviceid, $controller, $app, $class, $method);
+        if (!$routes) return;
+
+        foreach($routes as $route) {
+            /** @var $route \Orlex\Annotation\Route */
+
+            $serviceid = $this->serviceId($class);
+
+            $path = $this->globals['path'] . '/' . ltrim($route->path, '/');
+
+            $httpMethod = strtoupper(implode('|', $route->methods));
+            if (empty($httpMethod))
+                $httpMethod = 'GET';
+
+            $name = $route->name;
+            if (empty($name))
+                $name = $this->formatName($class, $method);
+
+            //Bind route to Silex application
+            $controller = $app->match($path, "$serviceid:{$method->getName()}")
+                              ->method($httpMethod)
+                              ->bind($name);
+
+            //Get parameters from method and bind default values to Silex route to allow optional
+            //parameters. E.g. public function fooAction($param_1, $param_2 = 'default'); will perform
+            //a $controller->value('param_2', 'default');
+            foreach ($method->getParameters() as $parameter) {
+                /** @var $parameter \ReflectionParameter */
+                if ($parameter->isDefaultValueAvailable()) {
+                    $controller->value($parameter->getName(), $parameter->getDefaultValue());
+                }
+            }
+
+            //Fetch and sort RouteModifier annotations for modification
+            $modifiers = array_filter($annotations, function($a) { return $a instanceOf RouteModifier;});
+            usort($modifiers, function (RouteModifier $a, RouteModifier $b) {
+                return $a->weight() > $b->weight() ? 1 : -1;
+            });
+
+            foreach ($modifiers as $annotation) {
+                /** @var $annotation RouteModifier */
+                $annotation->modify($serviceid, $controller, $app, $class, $method);
+            }
         }
     }
 
