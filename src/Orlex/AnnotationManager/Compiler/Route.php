@@ -37,6 +37,8 @@ class Route extends AbstractCompiler {
             return is_object($annotation) && $annotation instanceof RouteAnnotation;
         });
 
+        if (count($routes) > 1) trigger_error('Multiple Route annotations at a class level are not supported', E_USER_ERROR);
+
         if ($routes) {
             /** @var $route \Orlex\Annotation\Route */
             $route = $routes[0];
