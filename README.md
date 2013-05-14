@@ -63,11 +63,6 @@ Orlex is provided as a [composer package](http://getcomposer.org/) and requires 
 }
 ```
 
-WARNING
----
-
-**Orlex is currently in extremely active development.**
-
 Controller Traits
 ---
 
