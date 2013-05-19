@@ -110,7 +110,7 @@ class Route extends AbstractCompiler {
             //Fetch and sort RouteModifier annotations for modification
             $modifiers = array_filter($annotations, function($a) { return $a instanceOf RouteModifier;});
             usort($modifiers, function (RouteModifier $a, RouteModifier $b) {
-                return $a->weight() > $b->weight() ? 1 : -1;
+                return $a->weight() > $b->weight() ? -1 : 1;
             });
 
             foreach ($modifiers as $annotation) {

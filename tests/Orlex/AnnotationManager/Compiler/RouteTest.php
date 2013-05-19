@@ -81,7 +81,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase {
 
         $expectedService = "controller.sample_classwithoutcontaineraware";
         $expectedModify = ['first', 'second'];
-        $acutalModify   = [];
+        $actualModify   = [];
 
         //Setup and run class annotation to ensure global state
         $reflClass = new \ReflectionClass('Sample\ClassWithoutContainerAware');
@@ -105,19 +105,20 @@ class RouteTest extends \PHPUnit_Framework_TestCase {
         //Assure sort and ordering works
         $annotations[] = $firstMockAnnot = new \Sample\MockFirstAnnotation();
         $firstMockAnnot->delegate = function($serviceid, Controller $controller, Application $app, \ReflectionClass $class, \ReflectionMethod $method)
-                                         use($that, $expectedService, $reflClass, $reflMethod, $acutalModify) {
+                                         use($that, $expectedService, $reflClass, $reflMethod, &$actualModify) {
             $that->assertEquals($expectedService, $serviceid);
             $actualModify[] = 'first';
         };
 
         $annotations[] = $secondMockAnnot = new \Sample\MockFirstAnnotation();
         $secondMockAnnot->delegate = function($serviceid, Controller $controller, Application $app, \ReflectionClass $class, \ReflectionMethod $method)
-                                          use($that, $expectedService, $reflClass, $reflMethod, $acutalModify) {
+                                          use($that, $expectedService, $reflClass, $reflMethod, &$actualModify) {
             $that->assertEquals($expectedService, $serviceid);
             $actualModify[] = 'second';
         };
 
         $this->compiler->compileMethod($reflClass, $reflMethod, $annotations);
+        $this->assertEquals($expectedModify, $actualModify, 'Annotations executed in proper order');
 
         /** @var $controllerCollection \Silex\ControllerCollection */
         $controllerCollection = $this->app['controllers'];
@@ -128,6 +129,42 @@ class RouteTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotNull($route, 'Found route with expected name');
         $this->assertEquals('/foo/bar', $route->getPath(), 'Path includes parent path from controller annotation');
         $this->assertEquals(["GET", "POST"], $route->getMethods(), 'Expected methods set');
+        $this->assertEquals('bar', $route->getDefault('foo'), 'Default value inferred from reflection method');
+    }
+
+    public function testCompileMethodWithoutRouteName() {
+        $expectedService = "controller.sample_classwithoutcontaineraware";
+
+        //Setup and run class annotation to ensure global state
+        $reflClass = new \ReflectionClass('Sample\ClassWithoutContainerAware');
+
+        $classAnnotations = [];
+        $classAnnotations[] = $classAnnotation = new Annotation\Route();
+        $classAnnotation->path = "/foo";
+
+        $this->compiler->compileClass($reflClass, $classAnnotations);
+
+        //Setup method annotations
+        $reflMethod = $reflClass->getMethod('fooMethod');
+
+        $annotations = [];
+
+        $annotations[] = $routeAnnotation = new Annotation\Route();
+        //No name given, expecting a defualt name
+        $routeAnnotation->path = "/baz";
+        $routeAnnotation->methods = ["PUT"];
+
+        $this->compiler->compileMethod($reflClass, $reflMethod, $annotations);
+
+        /** @var $controllerCollection \Silex\ControllerCollection */
+        $controllerCollection = $this->app['controllers'];
+        $routes = $controllerCollection->flush();
+
+        $route = $routes->get("sample_classwithoutcontaineraware_foomethod");
+
+        $this->assertNotNull($route, 'Found route with expected name');
+        $this->assertEquals('/foo/baz', $route->getPath(), 'Path includes parent path from controller annotation');
+        $this->assertEquals(["PUT"], $route->getMethods(), 'Expected methods set');
         $this->assertEquals('bar', $route->getDefault('foo'), 'Default value inferred from reflection method');
     }
 

@@ -44,7 +44,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
         $app['orlex.route.compiler'] = $app->share(function($app) {
             $app['orlex.annotation.registry'];
-            
+
             $compiler = new Compiler\Route($app['orlex.annotation.reader'], $app['orlex.directoryloader']);
             $compiler->setContainer($app);
             return $compiler;
