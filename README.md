@@ -169,7 +169,7 @@ To-Do
 
 * ~~Clean up route compiler, become more DI friendly~~
 * ~~Post to packagist.org~~
-* Functional Testing
+* ~~Functional Testing~~
 * Annotation Caching
 * Route Caching
 * CLI Scaffolding (similar to Symfony's console command)
