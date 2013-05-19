@@ -10,6 +10,7 @@ use Orlex\AnnotationManager\Loader;
 
 use Doctrine\Common\Annotations;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Cache;
 
 class ServiceProvider implements ServiceProviderInterface {
     public function register(Application $app) {
@@ -21,14 +22,31 @@ class ServiceProvider implements ServiceProviderInterface {
         ////
         // User Configured Values
         ////
+        $app['orlex.cache.dir']       = null;
         $app['orlex.controller.dirs'] = [];
         $app['orlex.annotation.dirs'] = [];
 
         ////
         // Internal Services
         ////
-        $app['orlex.annotation.reader'] = $app->share(function() {
-            return new Annotations\AnnotationReader();
+        $app['orlex.cache'] = $app->share(function($app){
+            $cache_dir = $app['orlex.cache.dir'];
+
+            if (!$cache_dir) return false;
+
+            $cache = new Cache\FilesystemCache($cache_dir);
+
+            return $cache;
+        });
+
+        $app['orlex.annotation.reader'] = $app->share(function($app) {
+            $reader = new Annotations\AnnotationReader();
+
+            if ($cache = $app['orlex.cache']) {
+                $reader = new Annotations\CachedReader($reader, $cache);
+            }
+
+            return $reader;
         });
 
         $app['orlex.directoryloader'] = $app->share(function() {

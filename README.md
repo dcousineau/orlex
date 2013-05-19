@@ -150,6 +150,23 @@ For more information on how to define annotations, please see the [Doctrine Anno
 
 **Expect this interface to possibly change in the future, particularly where the `modify(…)` signature is concerned**.
 
+Annotation Caching
+---
+
+Orlex is setup for easy annotation caching via the `Doctrine\Common\Annotations\CachedReader` reader. Simply include a cache directory:
+
+```php
+<?php
+$app->register(new \Orlex\ServiceProvider(),[
+    'orlex.cache.dir' => __DIR__ . '/cache',
+    'orlex.controller.dirs' => [
+        __DIR__ . '/app/Controllers',
+    ],
+]);
+```
+
+And Orlex will setup a `Doctrine\Common\Cache\FilesystemCache` pointed at that directory and use said cache with the `CachedReader`. Alternatively you can override the `orlex.cache` service in your application container to return a `Doctrine\Common\Cache\Cache` object and it will be used instead.
+
 Internal Behavior
 ---
 
@@ -170,6 +187,6 @@ To-Do
 * ~~Clean up route compiler, become more DI friendly~~
 * ~~Post to packagist.org~~
 * ~~Functional Testing~~
-* Annotation Caching
+* ~~Annotation Caching~~
 * Route Caching
 * CLI Scaffolding (similar to Symfony's console command)
