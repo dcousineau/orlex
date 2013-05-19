@@ -7,6 +7,8 @@ $loader->add('app', __DIR__);
 
 $app = new \Silex\Application();
 
+$app['debug'] = true;
+
 $app->register(new \Orlex\ServiceProvider(),[
     'orlex.controller.dirs' => [
         __DIR__ . '/app/Controllers',

@@ -141,6 +141,10 @@ class Route extends AbstractCompiler {
     protected function formatName(\ReflectionClass $class, \ReflectionMethod $method = null) {
         $classname = strtolower(str_replace('\\', '_', $class->name));
 
+        if ($method) {
+            $classname .= '_' . strtolower($method->name);
+        }
+
         return $classname;
     }
 }
