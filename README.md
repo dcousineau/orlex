@@ -98,7 +98,7 @@ class IndexController {
 }
 ```
 
-Obviously each respsective trait will require their companion service provider to be already registered with the Silex application.
+Obviously each respective trait will require their companion service provider to be already registered with the Silex application.
 
 Custom Annotations
 ---
