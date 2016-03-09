@@ -22,7 +22,7 @@ class DirectoryLoader extends FileLoader {
     {
         $dir = $this->locator->locate($path);
 
-        $files = iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::LEAVES_ONLY));
+        $files = iterator_to_array(new \RegexIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::LEAVES_ONLY),,'/(.*).php$/'));
         usort($files, function (\SplFileInfo $a, \SplFileInfo $b) {
             return (string) $a > (string) $b ? 1 : -1;
         });
